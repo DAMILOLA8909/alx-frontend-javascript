@@ -4,6 +4,7 @@
  * This file demonstrates TypeScript interfaces with:
  * - Teacher interface with required, optional, and flexible properties
  * - Director interface that extends Teacher with additional required property
+ * - printTeacher function with interface definition
  * - Implementation examples showing interface usage
  * - Dynamic display of objects in the browser
  */
@@ -29,6 +30,27 @@ interface Teacher {
 interface Director extends Teacher {
   numberOfReports: number;
 }
+
+// Interface for printTeacher function:
+// - Defines the function signature for type checking
+// - Accepts two string parameters: firstName and lastName
+// - Returns a formatted string with first initial and full lastName
+interface printTeacherFunction {
+  (firstName: string, lastName: string): string;
+}
+
+/**
+ * printTeacher: Formats a teacher's name for display
+ * 
+ * @param firstName - The teacher's first name
+ * @param lastName - The teacher's last name
+ * @returns Formatted string in "F. LastName" format (e.g., "J. Doe")
+ * 
+ * Example: printTeacher("John", "Doe") returns "J. Doe"
+ */
+const printTeacher: printTeacherFunction = function printTeacher(firstName: string, lastName: string): string {
+  return `${firstName.charAt(0)}. ${lastName}`;
+};
 
 // TEACHER OBJECT EXAMPLES:
 // Demonstrating different combinations of required, optional, and additional properties
@@ -96,6 +118,7 @@ const director2: Director = {
  * This function:
  * - Creates a structured HTML layout
  * - Displays teachers and directors in separate sections
+ * - Shows printTeacher function examples
  * - Dynamically shows all properties including additional ones
  * - Uses different styling to distinguish between roles
  */
@@ -109,12 +132,45 @@ function displayTeachers(): void {
   container.style.padding = '20px';
   container.style.fontFamily = 'Arial, sans-serif';
 
+  // ==================== PRINT TEACHER EXAMPLES SECTION ====================
+  const printTeacherTitle = document.createElement('h2');
+  printTeacherTitle.textContent = 'printTeacher Function Examples';
+  printTeacherTitle.style.color = '#333';
+  printTeacherTitle.style.borderBottom = '2px solid #333';
+  printTeacherTitle.style.paddingBottom = '10px';
+  container.appendChild(printTeacherTitle);
+
+  // Create examples of printTeacher function
+  const printTeacherExamples = document.createElement('div');
+  printTeacherExamples.style.backgroundColor = '#f0f8ff';
+  printTeacherExamples.style.padding = '15px';
+  printTeacherExamples.style.borderRadius = '8px';
+  printTeacherExamples.style.margin = '10px 0';
+  
+  // Example 1: Basic usage
+  const example1 = document.createElement('p');
+  example1.innerHTML = `<strong>Example 1:</strong> printTeacher("John", "Doe") = <code>"${printTeacher('John', 'Doe')}"</code>`;
+  
+  // Example 2: With different names
+  const example2 = document.createElement('p');
+  example2.innerHTML = `<strong>Example 2:</strong> printTeacher("Alice", "Smith") = <code>"${printTeacher('Alice', 'Smith')}"</code>`;
+  
+  // Example 3: Using teacher objects
+  const example3 = document.createElement('p');
+  example3.innerHTML = `<strong>Example 3:</strong> printTeacher(teacher3.firstName, teacher3.lastName) = <code>"${printTeacher(teacher3.firstName, teacher3.lastName)}"</code>`;
+  
+  printTeacherExamples.appendChild(example1);
+  printTeacherExamples.appendChild(example2);
+  printTeacherExamples.appendChild(example3);
+  container.appendChild(printTeacherExamples);
+
   // ==================== TEACHERS SECTION ====================
   const teachersTitle = document.createElement('h2');
   teachersTitle.textContent = 'Teachers';
   teachersTitle.style.color = '#333';
   teachersTitle.style.borderBottom = '2px solid #333';
   teachersTitle.style.paddingBottom = '10px';
+  teachersTitle.style.marginTop = '40px';
   container.appendChild(teachersTitle);
 
   // Process each teacher and create their display card
@@ -127,15 +183,17 @@ function displayTeachers(): void {
     teacherDiv.style.margin = '10px 0';
     teacherDiv.style.backgroundColor = '#f9f9f9';
 
-    // Teacher name and title
+    // Teacher name and title using printTeacher format
     const title = document.createElement('h3');
-    title.textContent = `Teacher ${index + 1}: ${teacher.firstName} ${teacher.lastName}`;
+    title.textContent = `Teacher ${index + 1}: ${printTeacher(teacher.firstName, teacher.lastName)}`;
     title.style.marginTop = '0';
     title.style.color = '#333';
 
     // Display required and optional properties
     const details = document.createElement('div');
     details.innerHTML = `
+      <p><strong>Full Name:</strong> ${teacher.firstName} ${teacher.lastName}</p>
+      <p><strong>Display Name:</strong> ${printTeacher(teacher.firstName, teacher.lastName)}</p>
       <p><strong>Full Time Employee:</strong> ${teacher.fullTimeEmployee}</p>
       <p><strong>Location:</strong> ${teacher.location}</p>
       ${teacher.yearsOfExperience ? `<p><strong>Years of Experience:</strong> ${teacher.yearsOfExperience}</p>` : ''}
@@ -186,15 +244,17 @@ function displayTeachers(): void {
     directorDiv.style.margin = '10px 0';
     directorDiv.style.backgroundColor = '#e8f4fd'; // Light blue background
 
-    // Director name and title
+    // Director name and title using printTeacher format
     const title = document.createElement('h3');
-    title.textContent = `Director ${index + 1}: ${director.firstName} ${director.lastName}`;
+    title.textContent = `Director ${index + 1}: ${printTeacher(director.firstName, director.lastName)}`;
     title.style.marginTop = '0';
     title.style.color = '#1a5276'; // Dark blue color
 
     // Display required, optional, and director-specific properties
     const details = document.createElement('div');
     details.innerHTML = `
+      <p><strong>Full Name:</strong> ${director.firstName} ${director.lastName}</p>
+      <p><strong>Display Name:</strong> ${printTeacher(director.firstName, director.lastName)}</p>
       <p><strong>Full Time Employee:</strong> ${director.fullTimeEmployee}</p>
       <p><strong>Location:</strong> ${director.location}</p>
       <p><strong>Number of Reports:</strong> ${director.numberOfReports}</p>
@@ -232,24 +292,13 @@ function displayTeachers(): void {
 }
 
 /**
- * CONSOLE VERIFICATION: Log all objects to console for debugging
+ * CONSOLE VERIFICATION: Log all objects and function examples to console
  * 
  * This helps verify that:
  * - All interfaces are properly implemented
  * - Objects have the correct structure
+ * - printTeacher function works correctly
  * - TypeScript type checking is working
  */
-console.log('=== TEACHER OBJECTS ===');
-console.log('Teacher 1:', teacher1);
-console.log('Teacher 2:', teacher2);
-console.log('Teacher 3:', teacher3);
-console.log('=== DIRECTOR OBJECTS ===');
-console.log('Director 1:', director1);
-console.log('Director 2:', director2);
-
-/**
- * INITIALIZATION: Wait for DOM to load before executing display function
- * 
- * This ensures all HTML elements are available before we try to modify them
- */
-document.addEventListener('DOMContentLoaded', displayTeachers);
+console.log('=== PRINT TEACHER FUNCTION ===');
+console.log('printTeacher("John", "Doe"):', print
