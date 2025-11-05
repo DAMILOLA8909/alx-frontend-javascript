@@ -1,81 +1,115 @@
-// Interface for Teacher
+/**
+ * TASK 1: Teacher and Director Interfaces Implementation
+ * 
+ * This file demonstrates TypeScript interfaces with:
+ * - Teacher interface with required, optional, and flexible properties
+ * - Director interface that extends Teacher with additional required property
+ * - Implementation examples showing interface usage
+ * - Dynamic display of objects in the browser
+ */
+
+// Interface for Teacher with specific requirements:
+// - firstName and lastName are readonly (can only be set during initialization)
+// - fullTimeEmployee and location are always required
+// - yearsOfExperience is optional
+// - Index signature allows any additional properties
 interface Teacher {
   readonly firstName: string;
   readonly lastName: string;
   fullTimeEmployee: boolean;
   yearsOfExperience?: number;
   location: string;
-  [key: string]: any; // This allows any additional attributes
+  [key: string]: any; // Index signature: allows any additional attributes
 }
 
-// Interface for Directors that extends Teacher
-interface Directors extends Teacher {
+// Interface for Director that extends Teacher:
+// - Inherits all properties from Teacher interface
+// - Adds required numberOfReports property
+// - Maintains the flexibility of additional properties
+interface Director extends Teacher {
   numberOfReports: number;
 }
 
-// STEP 1: Create teacher objects using the Teacher interface
-const teacher3: Teacher = {
-  firstName: 'John',
-  fullTimeEmployee: false,
-  lastName: 'Doe',
-  location: 'London',
-  contract: false,
-  specialization: 'Science' // Additional information
-};
+// TEACHER OBJECT EXAMPLES:
+// Demonstrating different combinations of required, optional, and additional properties
 
+// Teacher 1: Has all required properties plus optional yearsOfExperience and additional properties
 const teacher1: Teacher = {
   firstName: 'Alice',
   lastName: 'Smith',
   fullTimeEmployee: true,
   location: 'New York',
-  yearsOfExperience: 5,
-  specialization: 'Mathematics', // Additional information
-  contract: true // Additional information
+  yearsOfExperience: 5,           // Optional property
+  specialization: 'Mathematics',  // Additional property
+  contract: true                  // Additional property
 };
 
+// Teacher 2: Full-time teacher with additional properties
 const teacher2: Teacher = {
   firstName: 'Bob',
   lastName: 'Johnson',
   fullTimeEmployee: true,
   location: 'Paris',
-  specialization: 'Mathematics', // Additional information
-  contract: true // Additional information
+  specialization: 'Mathematics',  // Additional property
+  contract: true                  // Additional property
 };
 
-// STEP 2: Create director objects using the Directors interface
-const director1: Directors = {
+// Teacher 3: Part-time teacher (fullTimeEmployee: false) with additional properties
+const teacher3: Teacher = {
+  firstName: 'John',
+  fullTimeEmployee: false,
+  lastName: 'Doe',
+  location: 'London',
+  contract: false,                // Additional property
+  specialization: 'Science'       // Additional property
+};
+
+// DIRECTOR OBJECT EXAMPLES:
+// Demonstrating interface inheritance and additional required property
+
+// Director 1: Full director example with all types of properties
+const director1: Director = {
   firstName: 'John',
   lastName: 'Doe',
   location: 'London',
   fullTimeEmployee: true,
-  numberOfReports: 17,
-  yearsOfExperience: 15, // Optional attribute from Teacher
-  department: 'Administration', // Additional information
-  officeNumber: 'A-101' // Additional information
+  numberOfReports: 17,            // Required by Director interface
+  yearsOfExperience: 15,          // Optional from Teacher interface
+  department: 'Administration',   // Additional property
+  officeNumber: 'A-101'           // Additional property
 };
 
-const director2: Directors = {
+// Director 2: Another director example showing interface flexibility
+const director2: Director = {
   firstName: 'Sarah',
   lastName: 'Wilson',
   location: 'Berlin',
   fullTimeEmployee: true,
-  numberOfReports: 8,
-  yearsOfExperience: 10, // Optional attribute from Teacher
-  department: 'Engineering' // Additional information
+  numberOfReports: 8,             // Required by Director interface
+  yearsOfExperience: 10,          // Optional from Teacher interface
+  department: 'Engineering'       // Additional property
 };
 
-// STEP 3: Function to display all information on the webpage
+/**
+ * DISPLAY FUNCTION: Renders all teachers and directors in the browser
+ * 
+ * This function:
+ * - Creates a structured HTML layout
+ * - Displays teachers and directors in separate sections
+ * - Dynamically shows all properties including additional ones
+ * - Uses different styling to distinguish between roles
+ */
 function displayTeachers(): void {
-  // Create arrays of teachers and directors
+  // Create arrays for organized display
   const teachers: Teacher[] = [teacher1, teacher2, teacher3];
-  const directors: Directors[] = [director1, director2];
+  const directors: Director[] = [director1, director2];
   
-  // Create main container for all content
+  // Create main container with basic styling
   const container = document.createElement('div');
   container.style.padding = '20px';
   container.style.fontFamily = 'Arial, sans-serif';
 
-  // STEP 4: Display Teachers section
+  // ==================== TEACHERS SECTION ====================
   const teachersTitle = document.createElement('h2');
   teachersTitle.textContent = 'Teachers';
   teachersTitle.style.color = '#333';
@@ -83,9 +117,9 @@ function displayTeachers(): void {
   teachersTitle.style.paddingBottom = '10px';
   container.appendChild(teachersTitle);
 
-  // STEP 5: Loop through each teacher and create their display card
+  // Process each teacher and create their display card
   teachers.forEach((teacher, index) => {
-    // Create a card for each teacher
+    // Create card container for individual teacher
     const teacherDiv = document.createElement('div');
     teacherDiv.style.border = '1px solid #ccc';
     teacherDiv.style.borderRadius = '8px';
@@ -93,13 +127,13 @@ function displayTeachers(): void {
     teacherDiv.style.margin = '10px 0';
     teacherDiv.style.backgroundColor = '#f9f9f9';
 
-    // Create teacher title
+    // Teacher name and title
     const title = document.createElement('h3');
     title.textContent = `Teacher ${index + 1}: ${teacher.firstName} ${teacher.lastName}`;
     title.style.marginTop = '0';
     title.style.color = '#333';
 
-    // STEP 6: Display basic teacher information
+    // Display required and optional properties
     const details = document.createElement('div');
     details.innerHTML = `
       <p><strong>Full Time Employee:</strong> ${teacher.fullTimeEmployee}</p>
@@ -107,15 +141,14 @@ function displayTeachers(): void {
       ${teacher.yearsOfExperience ? `<p><strong>Years of Experience:</strong> ${teacher.yearsOfExperience}</p>` : ''}
     `;
 
-    // STEP 7: Display additional information (previously called additional attributes)
+    // Dynamic display of additional properties
     const additionalInfo = document.createElement('div');
     additionalInfo.innerHTML = '<strong>Additional Information:</strong>';
     const additionalList = document.createElement('ul');
     additionalList.style.marginLeft = '20px';
 
-    // Loop through all properties and find additional ones
+    // Filter out standard properties to find additional ones
     for (const [key, value] of Object.entries(teacher)) {
-      // Filter out standard properties to find additional information
       if (!['firstName', 'lastName', 'fullTimeEmployee', 'location', 'yearsOfExperience'].includes(key)) {
         const listItem = document.createElement('li');
         listItem.textContent = `${key}: ${value}`;
@@ -123,7 +156,7 @@ function displayTeachers(): void {
       }
     }
 
-    // STEP 8: Assemble the teacher card
+    // Assemble the teacher card
     teacherDiv.appendChild(title);
     teacherDiv.appendChild(details);
     if (additionalList.children.length > 0) {
@@ -134,7 +167,7 @@ function displayTeachers(): void {
     container.appendChild(teacherDiv);
   });
 
-  // STEP 9: Display Directors section
+  // ==================== DIRECTORS SECTION ====================
   const directorsTitle = document.createElement('h2');
   directorsTitle.textContent = 'Directors';
   directorsTitle.style.color = '#333';
@@ -143,23 +176,23 @@ function displayTeachers(): void {
   directorsTitle.style.marginTop = '40px';
   container.appendChild(directorsTitle);
 
-  // STEP 10: Loop through each director and create their display card
+  // Process each director and create their display card
   directors.forEach((director, index) => {
-    // Create a card for each director (with different styling)
+    // Create card container for individual director (different styling)
     const directorDiv = document.createElement('div');
     directorDiv.style.border = '1px solid #666';
     directorDiv.style.borderRadius = '8px';
     directorDiv.style.padding = '15px';
     directorDiv.style.margin = '10px 0';
-    directorDiv.style.backgroundColor = '#e8f4fd';
+    directorDiv.style.backgroundColor = '#e8f4fd'; // Light blue background
 
-    // Create director title
+    // Director name and title
     const title = document.createElement('h3');
     title.textContent = `Director ${index + 1}: ${director.firstName} ${director.lastName}`;
     title.style.marginTop = '0';
-    title.style.color = '#1a5276';
+    title.style.color = '#1a5276'; // Dark blue color
 
-    // STEP 11: Display basic director information
+    // Display required, optional, and director-specific properties
     const details = document.createElement('div');
     details.innerHTML = `
       <p><strong>Full Time Employee:</strong> ${director.fullTimeEmployee}</p>
@@ -168,15 +201,14 @@ function displayTeachers(): void {
       ${director.yearsOfExperience ? `<p><strong>Years of Experience:</strong> ${director.yearsOfExperience}</p>` : ''}
     `;
 
-    // STEP 12: Display additional information for directors
+    // Dynamic display of additional properties for directors
     const additionalInfo = document.createElement('div');
     additionalInfo.innerHTML = '<strong>Additional Information:</strong>';
     const additionalList = document.createElement('ul');
     additionalList.style.marginLeft = '20px';
 
-    // Loop through all properties and find additional ones
+    // Filter out standard properties to find additional ones
     for (const [key, value] of Object.entries(director)) {
-      // Filter out standard properties to find additional information
       if (!['firstName', 'lastName', 'fullTimeEmployee', 'location', 'yearsOfExperience', 'numberOfReports'].includes(key)) {
         const listItem = document.createElement('li');
         listItem.textContent = `${key}: ${value}`;
@@ -184,7 +216,7 @@ function displayTeachers(): void {
       }
     }
 
-    // STEP 13: Assemble the director card
+    // Assemble the director card
     directorDiv.appendChild(title);
     directorDiv.appendChild(details);
     if (additionalList.children.length > 0) {
@@ -195,16 +227,29 @@ function displayTeachers(): void {
     container.appendChild(directorDiv);
   });
 
-  // STEP 14: Add everything to the webpage
+  // Add the complete display to the webpage
   document.body.appendChild(container);
 }
 
-// STEP 15: Log all objects to console for verification
+/**
+ * CONSOLE VERIFICATION: Log all objects to console for debugging
+ * 
+ * This helps verify that:
+ * - All interfaces are properly implemented
+ * - Objects have the correct structure
+ * - TypeScript type checking is working
+ */
+console.log('=== TEACHER OBJECTS ===');
 console.log('Teacher 1:', teacher1);
 console.log('Teacher 2:', teacher2);
 console.log('Teacher 3:', teacher3);
+console.log('=== DIRECTOR OBJECTS ===');
 console.log('Director 1:', director1);
 console.log('Director 2:', director2);
 
-// STEP 16: Wait for page to load, then display everything
+/**
+ * INITIALIZATION: Wait for DOM to load before executing display function
+ * 
+ * This ensures all HTML elements are available before we try to modify them
+ */
 document.addEventListener('DOMContentLoaded', displayTeachers);
