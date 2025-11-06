@@ -119,7 +119,7 @@ function printTeacher({ firstName, lastName }: { firstName: string; lastName: st
  * - Clear contract for class usage
  * - Type safety for all method calls
  */
-class StudentClass implements StudentClassInterface {
+class StudentClass {
   // Private properties for internal state management
   private firstName: string;
   private lastName: string;
