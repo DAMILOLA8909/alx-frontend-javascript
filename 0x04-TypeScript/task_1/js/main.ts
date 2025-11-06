@@ -39,6 +39,7 @@ interface printTeacherFunction {
   (firstName: string, lastName: string): string;
 }
 
+
 /**
  * printTeacher: Formats a teacher's name for display
  * 
@@ -48,9 +49,9 @@ interface printTeacherFunction {
  * 
  * Example: printTeacher("John", "Doe") returns "J. Doe"
  */
-const printTeacher: printTeacherFunction = (firstName, lastName) => {
-  return `${firstName[0]}. ${lastName}`;
-};
+function printTeacher(firstName: string, lastName: string): string {
+  return `${firstName}. ${lastName}`;
+}
 
 // TEACHER OBJECT EXAMPLES:
 // Demonstrating different combinations of required, optional, and additional properties
