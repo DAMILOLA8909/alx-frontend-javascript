@@ -100,9 +100,9 @@ interface StudentClassInterface {
  */
 
 function printTeacher(firstName: string, lastName: string): string {
-  return `${firstName.charAt(0)}. ${lastName}`;
+  const firstLetter = firstName.charAt(0);
+  return `${firstLetter}. ${lastName}`;
 }
-
 // ==================== CLASS IMPLEMENTATION ====================
 
 /**
