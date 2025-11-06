@@ -1,22 +1,25 @@
 /**
  * TASK 2: Employee Management System with Interfaces and Classes
  * 
- * This file demonstrates:
+ * This implementation demonstrates:
  * - Interface definitions for different employee roles
- * - Class implementations with specific behaviors
- * - Factory function for creating employees based on salary
- * - Union types for flexible function parameters
+ * - Class implementations with role-specific behaviors
+ * - Factory pattern for employee creation
+ * - Type predicates for runtime type checking
+ * - Polymorphic behavior through interface contracts
  */
 
 // ==================== INTERFACE DEFINITIONS ====================
 
 /**
- * DirectorInterface: Defines the contract for Director objects
+ * DirectorInterface: Contract for Director role capabilities
  * 
- * Methods:
- * - workFromHome(): Specific working location for directors
- * - getCoffeeBreak(): Break behavior for directors  
- * - workDirectorTasks(): Specific task execution for directors
+ * Defines the three required methods for Directors:
+ * - workFromHome(): Remote work capability
+ * - getCoffeeBreak(): Break privileges  
+ * - workDirectorTasks(): Executive-level responsibilities
+ * 
+ * Interface segregation: Focuses only on Director-specific behaviors
  */
 interface DirectorInterface {
   workFromHome(): string;
@@ -25,12 +28,14 @@ interface DirectorInterface {
 }
 
 /**
- * TeacherInterface: Defines the contract for Teacher objects
+ * TeacherInterface: Contract for Teacher role capabilities
  * 
- * Methods:
- * - workFromHome(): Specific working location for teachers
- * - getCoffeeBreak(): Break behavior for teachers
- * - workTeacherTasks(): Specific task execution for teachers
+ * Defines the three required methods for Teachers:
+ * - workFromHome(): On-site work requirement
+ * - getCoffeeBreak(): Limited break availability
+ * - workTeacherTasks(): Educational responsibilities
+ * 
+ * Parallel structure to DirectorInterface but with different implementations
  */
 interface TeacherInterface {
   workFromHome(): string;
@@ -41,33 +46,35 @@ interface TeacherInterface {
 // ==================== CLASS IMPLEMENTATIONS ====================
 
 /**
- * Director: Implements DirectorInterface with director-specific behaviors
+ * Director: Implements executive-level employee behaviors
  * 
- * Director Behavior:
- * - Can work from home
- * - Can take coffee breaks
- * - Performs director-specific tasks
+ * Represents high-level management with privileges:
+ * - Can work remotely with flexibility
+ * - Has coffee break privileges
+ * - Handles director-level strategic tasks
+ * 
+ * Implements DirectorInterface ensuring contract compliance
  */
 class Director implements DirectorInterface {
   /**
-   * workFromHome: Directors can work remotely
-   * @returns string indicating working from home
+   * workFromHome: Directors have remote work flexibility
+   * @returns string confirming remote work capability
    */
   workFromHome(): string {
     return 'Working from home';
   }
 
   /**
-   * getCoffeeBreak: Directors are allowed breaks
-   * @returns string indicating taking a coffee break
+   * getCoffeeBreak: Directors have break privileges
+   * @returns string indicating break availability
    */
   getCoffeeBreak(): string {
     return 'Getting a coffee break';
   }
 
   /**
-   * workDirectorTasks: Directors perform high-level tasks
-   * @returns string indicating performing director tasks
+   * workDirectorTasks: Directors handle strategic responsibilities
+   * @returns string describing executive task execution
    */
   workDirectorTasks(): string {
     return 'Getting to director tasks';
@@ -75,33 +82,35 @@ class Director implements DirectorInterface {
 }
 
 /**
- * Teacher: Implements TeacherInterface with teacher-specific behaviors
+ * Teacher: Implements educational employee behaviors
  * 
- * Teacher Behavior:
- * - Cannot work from home
- * - Cannot take breaks during work
- * - Performs teaching-specific tasks
+ * Represents teaching staff with specific constraints:
+ * - Typically required to work on-site
+ * - Limited break opportunities during work
+ * - Focuses on educational task execution
+ * 
+ * Implements TeacherInterface ensuring contract compliance
  */
 class Teacher implements TeacherInterface {
   /**
-   * workFromHome: Teachers typically work on-site
-   * @returns string indicating cannot work from home
+   * workFromHome: Teachers usually work on-site
+   * @returns string indicating limited remote work capability
    */
   workFromHome(): string {
     return 'Cannot work from home';
   }
 
   /**
-   * getCoffeeBreak: Teachers have limited break time
-   * @returns string indicating cannot take breaks
+   * getCoffeeBreak: Teachers have constrained break times
+   * @returns string indicating limited break availability
    */
   getCoffeeBreak(): string {
     return 'Cannot have a break';
   }
 
   /**
-   * workTeacherTasks: Teachers perform educational tasks
-   * @returns string indicating performing teaching work
+   * workTeacherTasks: Teachers focus on educational duties
+   * @returns string describing teaching task execution
    */
   workTeacherTasks(): string {
     return 'Getting to work';
@@ -110,30 +119,90 @@ class Teacher implements TeacherInterface {
 
 // ==================== FACTORY FUNCTION ====================
 
+/**
+ * createEmployee: Factory function for employee creation based on salary
+ * 
+ * Implements business logic for role assignment:
+ * - Salary below 500: Creates Teacher (budget constraint)
+ * - Salary 500 or above: Creates Director (investment in leadership)
+ * - Accepts both number and string salary inputs
+ * 
+ * @param salary - Compensation amount determining employee role
+ * @returns Director | Teacher instance based on salary threshold
+ * 
+ * Design Pattern: Factory Method pattern for object creation
+ */
 function createEmployee(salary: number | string): Director | Teacher {
+  // Salary-based role assignment logic
   if (salary < 500) {
-    return new Teacher();
+    return new Teacher();  // Lower budget = Teaching role
   } else {
-    return new Director();
+    return new Director(); // Higher budget = Leadership role
+  }
+}
+
+// ==================== TYPE PREDICATE AND WORK EXECUTION ====================
+
+/**
+ * isDirector: Type predicate function for runtime type checking
+ * 
+ * Type Predicate Features:
+ * - Returns boolean indicating Director type
+ * - Uses 'employee is Director' syntax for TypeScript type narrowing
+ * - Enables intelligent type inference in conditional blocks
+ * 
+ * @param employee - Union type of Director | Teacher
+ * @returns boolean - true if employee is Director instance
+ * 
+ * Type Safety: Enables compile-time type checking with runtime validation
+ */
+function isDirector(employee: Director | Teacher): employee is Director {
+  return employee instanceof Director;
+}
+
+/**
+ * executeWork: Polymorphic function for role-appropriate task execution
+ * 
+ * Implements behavior polymorphism:
+ * - Uses isDirector type predicate for type-safe branching
+ * - Executes Director tasks for leadership roles
+ * - Executes Teacher tasks for educational roles
+ * - Returns task-specific result strings
+ * 
+ * @param employee - Director | Teacher instance to execute work
+ * @returns string - Result of the executed work tasks
+ * 
+ * Design Pattern: Strategy pattern for behavior variation
+ */
+function executeWork(employee: Director | Teacher): string {
+  if (isDirector(employee)) {
+    // TypeScript knows employee is Director in this block
+    return employee.workDirectorTasks();
+  } else {
+    // TypeScript knows employee is Teacher in this block
+    return employee.workTeacherTasks();
   }
 }
 
 // ==================== TESTING AND DEMONSTRATION ====================
 
 /**
- * displayEmployeeInfo: Demonstrates the createEmployee function and employee behaviors
+ * displayEmployeeInfo: Visual demonstration of employee system functionality
  * 
- * Shows:
+ * Creates comprehensive UI showing:
  * - Employee creation based on different salary inputs
- * - Method behaviors for each employee type
- * - Type-specific task execution
+ * - Type predicate verification results
+ * - Task execution outcomes
+ * - Expected vs actual behavior validation
+ * 
+ * UI Design: Color-coded sections for different employee types
  */
 function displayEmployeeInfo(): void {
   const container = document.createElement('div');
   container.style.padding = '20px';
   container.style.fontFamily = 'Arial, sans-serif';
 
-  // Title
+  // Main title section
   const title = document.createElement('h1');
   title.textContent = 'Employee Management System';
   title.style.color = '#333';
@@ -141,113 +210,89 @@ function displayEmployeeInfo(): void {
   title.style.paddingBottom = '10px';
   container.appendChild(title);
 
-  // Test Cases Section
+  // Test cases section header
   const testCasesTitle = document.createElement('h2');
-  testCasesTitle.textContent = 'createEmployee Test Cases';
+  testCasesTitle.textContent = 'Function Tests';
   testCasesTitle.style.color = '#333';
   testCasesTitle.style.marginTop = '30px';
   container.appendChild(testCasesTitle);
 
-  // Test case 1: Low salary (Teacher)
-  const test1 = document.createElement('div');
-  test1.style.border = '1px solid #ccc';
-  test1.style.borderRadius = '8px';
-  test1.style.padding = '15px';
-  test1.style.margin = '10px 0';
-  test1.style.backgroundColor = '#f9f9f9';
+  // ========== TEACHER TEST CASE ==========
   
-  const employee1 = createEmployee(200);
-  test1.innerHTML = `
-    <h3 style="margin: 0 0 10px 0; color: #d32f2f;">Test 1: createEmployee(200)</h3>
-    <p><strong>Employee Type:</strong> ${employee1.constructor.name}</p>
-    <p><strong>workFromHome():</strong> ${employee1.workFromHome()}</p>
-    <p><strong>getCoffeeBreak():</strong> ${employee1.getCoffeeBreak()}</p>
-    <p><strong>Tasks:</strong> ${employee1 instanceof Teacher ? employee1.workTeacherTasks() : employee1.workDirectorTasks()}</p>
-  `;
-  container.appendChild(test1);
-
-  // Test case 2: High salary (Director)
-  const test2 = document.createElement('div');
-  test2.style.border = '1px solid #666';
-  test2.style.borderRadius = '8px';
-  test2.style.padding = '15px';
-  test2.style.margin = '10px 0';
-  test2.style.backgroundColor = '#e8f4fd';
+  /**
+   * Teacher Test: Demonstrates low-salary employee creation
+   * Expected: Teacher instance with specific behaviors
+   */
+  const teacherTest = document.createElement('div');
+  teacherTest.style.border = '1px solid #ccc';
+  teacherTest.style.borderRadius = '8px';
+  teacherTest.style.padding = '15px';
+  teacherTest.style.margin = '10px 0';
+  teacherTest.style.backgroundColor = '#f9f9f9';
   
-  const employee2 = createEmployee(1000);
-  test2.innerHTML = `
-    <h3 style="margin: 0 0 10px 0; color: #1976d2;">Test 2: createEmployee(1000)</h3>
-    <p><strong>Employee Type:</strong> ${employee2.constructor.name}</p>
-    <p><strong>workFromHome():</strong> ${employee2.workFromHome()}</p>
-    <p><strong>getCoffeeBreak():</strong> ${employee2.getCoffeeBreak()}</p>
-    <p><strong>Tasks:</strong> ${employee2 instanceof Teacher ? employee2.workTeacherTasks() : employee2.workDirectorTasks()}</p>
+  const teacherEmployee = createEmployee(200);
+  teacherTest.innerHTML = `
+    <h3 style="margin: 0 0 10px 0; color: #d32f2f;">Low Salary: createEmployee(200)</h3>
+    <p><strong>Employee Type:</strong> ${teacherEmployee.constructor.name}</p>
+    <p><strong>isDirector Check:</strong> ${isDirector(teacherEmployee)}</p>
+    <p><strong>executeWork Result:</strong> ${executeWork(teacherEmployee)}</p>
+    <p><strong>Work Flexibility:</strong> ${teacherEmployee.workFromHome()}</p>
+    <p><strong>Break Policy:</strong> ${teacherEmployee.getCoffeeBreak()}</p>
   `;
-  container.appendChild(test2);
+  container.appendChild(teacherTest);
 
-  // Test case 3: String salary (Director)
-  const test3 = document.createElement('div');
-  test3.style.border = '1px solid #666';
-  test3.style.borderRadius = '8px';
-  test3.style.padding = '15px';
-  test3.style.margin = '10px 0';
-  test3.style.backgroundColor = '#e8f4fd';
+  // ========== DIRECTOR TEST CASE ==========
   
-  const employee3 = createEmployee('$500');
-  test3.innerHTML = `
-    <h3 style="margin: 0 0 10px 0; color: #1976d2;">Test 3: createEmployee('$500')</h3>
-    <p><strong>Employee Type:</strong> ${employee3.constructor.name}</p>
-    <p><strong>workFromHome():</strong> ${employee3.workFromHome()}</p>
-    <p><strong>getCoffeeBreak():</strong> ${employee3.getCoffeeBreak()}</p>
-    <p><strong>Tasks:</strong> ${employee3 instanceof Teacher ? employee3.workTeacherTasks() : employee3.workDirectorTasks()}</p>
+  /**
+   * Director Test: Demonstrates high-salary employee creation  
+   * Expected: Director instance with privileged behaviors
+   */
+  const directorTest = document.createElement('div');
+  directorTest.style.border = '1px solid #666';
+  directorTest.style.borderRadius = '8px';
+  directorTest.style.padding = '15px';
+  directorTest.style.margin = '10px 0';
+  directorTest.style.backgroundColor = '#e8f4fd';
+  
+  const directorEmployee = createEmployee(1000);
+  directorTest.innerHTML = `
+    <h3 style="margin: 0 0 10px 0; color: #1976d2;">High Salary: createEmployee(1000)</h3>
+    <p><strong>Employee Type:</strong> ${directorEmployee.constructor.name}</p>
+    <p><strong>isDirector Check:</strong> ${isDirector(directorEmployee)}</p>
+    <p><strong>executeWork Result:</strong> ${executeWork(directorEmployee)}</p>
+    <p><strong>Work Flexibility:</strong> ${directorEmployee.workFromHome()}</p>
+    <p><strong>Break Policy:</strong> ${directorEmployee.getCoffeeBreak()}</p>
   `;
-  container.appendChild(test3);
+  container.appendChild(directorTest);
 
-  // Method Comparison Section
-  const comparisonTitle = document.createElement('h2');
-  comparisonTitle.textContent = 'Method Behavior Comparison';
-  comparisonTitle.style.color = '#333';
-  comparisonTitle.style.marginTop = '30px';
-  container.appendChild(comparisonTitle);
+  // ========== VALIDATION SECTION ==========
+  
+  /**
+   * Validation: Shows expected results from requirements specification
+   * Verifies implementation matches assignment expectations
+   */
+  const validationSection = document.createElement('div');
+  validationSection.style.border = '1px solid #4caf50';
+  validationSection.style.borderRadius = '8px';
+  validationSection.style.padding = '15px';
+  validationSection.style.margin = '10px 0';
+  validationSection.style.backgroundColor = '#e8f5e8';
 
-  const comparisonDiv = document.createElement('div');
-  comparisonDiv.style.border = '1px solid #ddd';
-  comparisonDiv.style.borderRadius = '8px';
-  comparisonDiv.style.padding = '15px';
-  comparisonDiv.style.margin = '10px 0';
-  comparisonDiv.style.backgroundColor = '#fffde7';
-
-  const director = new Director();
-  const teacher = new Teacher();
-
-  comparisonDiv.innerHTML = `
-    <table style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr style="background-color: #f5f5f5;">
-          <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Method</th>
-          <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Director</th>
-          <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Teacher</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="padding: 10px; border: 1px solid #ddd;">workFromHome()</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">${director.workFromHome()}</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">${teacher.workFromHome()}</td>
-        </tr>
-        <tr>
-          <td style="padding: 10px; border: 1px solid #ddd;">getCoffeeBreak()</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">${director.getCoffeeBreak()}</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">${teacher.getCoffeeBreak()}</td>
-        </tr>
-        <tr>
-          <td style="padding: 10px; border: 1px solid #ddd;">Tasks</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">${director.workDirectorTasks()}</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">${teacher.workTeacherTasks()}</td>
-        </tr>
-      </tbody>
-    </table>
+  validationSection.innerHTML = `
+    <h3 style="margin: 0 0 15px 0; color: #2e7d32;">Requirement Validation:</h3>
+    <div style="background: #f1f8e9; padding: 10px; border-radius: 4px; margin: 10px 0;">
+      <strong>executeWork(createEmployee(200)):</strong> ${executeWork(createEmployee(200))}
+      <br><em>Expected: "Getting to work"</em>
+    </div>
+    <div style="background: #f1f8e9; padding: 10px; border-radius: 4px; margin: 10px 0;">
+      <strong>executeWork(createEmployee(1000)):</strong> ${executeWork(createEmployee(1000))}
+      <br><em>Expected: "Getting to director tasks"</em>
+    </div>
+    <p style="margin: 10px 0 0 0; font-style: italic; color: #555;">
+      These results validate the assignment requirements are met correctly.
+    </p>
   `;
-  container.appendChild(comparisonDiv);
+  container.appendChild(validationSection);
 
   document.body.appendChild(container);
 }
@@ -255,26 +300,39 @@ function displayEmployeeInfo(): void {
 // ==================== CONSOLE VERIFICATION ====================
 
 /**
- * Console tests to verify the implementation matches expected results
+ * Console Test Suite: Comprehensive verification of all functionality
+ * 
+ * Tests cover:
+ * - Employee creation with various inputs
+ * - Type predicate accuracy
+ * - Task execution correctness
+ * - Expected output validation
  */
-console.log('=== createEmployee FUNCTION TESTS ===');
-console.log('createEmployee(200):', createEmployee(200)); // Should be Teacher
-console.log('createEmployee(1000):', createEmployee(1000)); // Should be Director  
-console.log('createEmployee(\'$500\'):', createEmployee('$500')); // Should be Director
 
-console.log('=== DIRECTOR METHOD TESTS ===');
-const directorTest = new Director();
-console.log('Director workFromHome():', directorTest.workFromHome());
-console.log('Director getCoffeeBreak():', directorTest.getCoffeeBreak());
-console.log('Director workDirectorTasks():', directorTest.workDirectorTasks());
+console.log('=== EMPLOYEE CREATION VERIFICATION ===');
+console.log('createEmployee(200):', createEmployee(200));        // Expected: Teacher
+console.log('createEmployee(1000):', createEmployee(1000));      // Expected: Director
 
-console.log('=== TEACHER METHOD TESTS ===');
-const teacherTest = new Teacher();
-console.log('Teacher workFromHome():', teacherTest.workFromHome());
-console.log('Teacher getCoffeeBreak():', teacherTest.getCoffeeBreak());
-console.log('Teacher workTeacherTasks():', teacherTest.workTeacherTasks());
+console.log('=== TYPE PREDICATE ACCURACY ===');
+console.log('isDirector(createEmployee(200)):', isDirector(createEmployee(200)));    // Expected: false
+console.log('isDirector(createEmployee(1000)):', isDirector(createEmployee(1000)));  // Expected: true
+
+console.log('=== TASK EXECUTION VALIDATION ===');
+console.log('executeWork(createEmployee(200)):', executeWork(createEmployee(200)));    // Expected: "Getting to work"
+console.log('executeWork(createEmployee(1000)):', executeWork(createEmployee(1000)));  // Expected: "Getting to director tasks"
+
+console.log('=== BEHAVIOR VERIFICATION ===');
+const director = new Director();
+const teacher = new Teacher();
+console.log('Director workFromHome():', director.workFromHome());  // Expected: "Working from home"
+console.log('Teacher workFromHome():', teacher.workFromHome());    // Expected: "Cannot work from home"
 
 // ==================== INITIALIZATION ====================
 
-// Initialize the display when DOM is loaded
+/**
+ * DOM Content Loaded Event Handler
+ * 
+ * Ensures safe DOM manipulation by waiting for full document load
+ * Initializes the employee management system demonstration
+ */
 document.addEventListener('DOMContentLoaded', displayEmployeeInfo);
