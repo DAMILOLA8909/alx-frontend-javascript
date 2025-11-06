@@ -48,7 +48,7 @@ interface printTeacherFunction {
  * 
  * Example: printTeacher("John", "Doe") returns "J. Doe"
  */
-const printTeacher: printTeacherFunction = ({ firstName, lastName }) => {
+const printTeacher: printTeacherFunction = (firstName, lastName) => {
   return `${firstName[0]}. ${lastName}`;
 };
 
