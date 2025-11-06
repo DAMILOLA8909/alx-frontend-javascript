@@ -99,9 +99,9 @@ interface StudentClassInterface {
  * - Parameters and return type are strictly typed
  */
 
-const printTeacher: printTeacherFunction = function({ firstName, lastName }: { firstName: string; lastName: string }): string {
+function printTeacher(firstName: string, lastName: string): string {
   return `${firstName.charAt(0)}. ${lastName}`;
-};
+}
 
 // ==================== CLASS IMPLEMENTATION ====================
 
