@@ -121,12 +121,22 @@ class Teacher implements TeacherInterface {
  * @param salary - Either number or string representing salary
  * @returns Director | Teacher instance based on salary criteria
  */
+/**
+ * createEmployee: Factory function that creates employees based on salary
+ * 
+ * Business Logic:
+ * - Salary < 500: Creates Teacher (lower budget)
+ * - Salary >= 500: Creates Director (higher budget)
+ * - String salary: Always creates Director (assumed sufficient budget)
+ * 
+ * @param salary - Either number or string representing salary
+ * @returns Director | Teacher instance based on salary criteria
+ */
 function createEmployee(salary: number | string): Director | Teacher {
   if (typeof salary === 'number' && salary < 500) {
     return new Teacher();
-  } else {
-    return new Director();
   }
+  return new Director();
 }
 
 
