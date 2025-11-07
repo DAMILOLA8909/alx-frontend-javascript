@@ -178,12 +178,10 @@ type Subjects = 'Math' | 'History';
 /**
  * teachClass: Determines teaching message based on subject
  */
+type Subjects = 'Math' | 'History';
+
 function teachClass(todayClass: Subjects): string {
-  if (todayClass === 'Math') {
-    return 'Teaching Math';
-  } else {
-    return 'Teaching History';
-  }
+  return `Teaching ${todayClass}`;
 }
 
 // ==================== TESTING AND VERIFICATION ====================
