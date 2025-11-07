@@ -168,6 +168,40 @@ function executeWork(employee: Director | Teacher): string {
   }
 }
 
+// ==================== STRING LITERAL TYPE AND TEACH CLASS FUNCTION ====================
+
+/**
+ * Subjects: String literal type restricting to specific subject values
+ * 
+ * String Literal Type Features:
+ * - Allows only 'Math' or 'History' as valid values
+ * - Provides compile-time validation for subject strings
+ * - Enumerates possible values without using enum
+ */
+type Subjects = 'Math' | 'History';
+
+/**
+ * teachClass: Determines teaching message based on subject
+ * 
+ * Function Logic:
+ * - Uses Subjects string literal type for parameter validation
+ * - Returns specific teaching message for each subject
+ * - Provides clear, subject-specific feedback
+ * 
+ * @param todayClass - Subject to be taught, restricted to Math or History
+ * @returns string - Teaching message for the specified subject
+ */
+function teachClass(todayClass: Subjects): string {
+  if (todayClass === 'Math') {
+    return 'Teaching Math';
+  } else if (todayClass === 'History') {
+    return 'Teaching History';
+  }
+  
+  // TypeScript ensures this case never happens due to Subjects type
+  throw new Error('Invalid subject');
+}
+
 // ==================== TESTING AND VERIFICATION ====================
 
 /**
@@ -177,6 +211,7 @@ function executeWork(employee: Director | Teacher): string {
  * - Employee creation with various salary inputs
  * - Type predicate accuracy for role detection
  * - Task execution correctness for each role
+ * - Subject teaching functionality
  * - Expected output matching requirements
  */
 
@@ -192,6 +227,10 @@ console.log('isDirector(createEmployee(1000)):', isDirector(createEmployee(1000)
 console.log('=== TASK EXECUTION TESTS ===');
 console.log('executeWork(createEmployee(200)):', executeWork(createEmployee(200)));    // Expected: "Getting to work"
 console.log('executeWork(createEmployee(1000)):', executeWork(createEmployee(1000)));  // Expected: "Getting to director tasks"
+
+console.log('=== TEACH CLASS TESTS ===');
+console.log('teachClass(\'Math\'):', teachClass('Math'));        // Expected: "Teaching Math"
+console.log('teachClass(\'History\'):', teachClass('History'));  // Expected: "Teaching History"
 
 console.log('=== BEHAVIOR VERIFICATION ===');
 const testDirector = new Director();
