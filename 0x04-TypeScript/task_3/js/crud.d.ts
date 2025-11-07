@@ -1,9 +1,7 @@
 // Import types from interface.ts
 import { RowID, RowElement } from './interface';
 
-// Declare module for crud.js functions
-declare module './crud' {
-  export function insertRow(row: RowElement): RowID;
-  export function deleteRow(rowId: RowID): void;
-  export function updateRow(rowId: RowID, row: RowElement): RowID;
-}
+// Declare the CRUD functions with proper types
+declare function insertRow(row: RowElement): number;
+declare function deleteRow(rowId: RowID): void;
+declare function updateRow(rowId: RowID, row: RowElement): number;
