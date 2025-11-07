@@ -172,34 +172,18 @@ function executeWork(employee: Director | Teacher): string {
 
 /**
  * Subjects: String literal type restricting to specific subject values
- * 
- * String Literal Type Features:
- * - Allows only 'Math' or 'History' as valid values
- * - Provides compile-time validation for subject strings
- * - Enumerates possible values without using enum
  */
 type Subjects = 'Math' | 'History';
 
 /**
  * teachClass: Determines teaching message based on subject
- * 
- * Function Logic:
- * - Uses Subjects string literal type for parameter validation
- * - Returns specific teaching message for each subject
- * - Provides clear, subject-specific feedback
- * 
- * @param todayClass - Subject to be taught, restricted to Math or History
- * @returns string - Teaching message for the specified subject
  */
 function teachClass(todayClass: Subjects): string {
   if (todayClass === 'Math') {
     return 'Teaching Math';
-  } else if (todayClass === 'History') {
+  } else {
     return 'Teaching History';
   }
-  
-  // TypeScript ensures this case never happens due to Subjects type
-  throw new Error('Invalid subject');
 }
 
 // ==================== TESTING AND VERIFICATION ====================
