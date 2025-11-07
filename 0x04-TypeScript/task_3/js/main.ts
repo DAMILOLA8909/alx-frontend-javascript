@@ -15,12 +15,8 @@ const row: RowElement = {
 // Insert the row and get the new row ID
 const newRowID: RowID = CRUD.insertRow(row);
 
-// Create an updated row with age field
-const updatedRow: RowElement = { 
-  firstName: 'Guillaume', 
-  lastName: 'Salva', 
-  age: 23 
-};
+// Create an updated row with age field using object spread
+const updatedRow: RowElement = { ...row, age: 23 };
 
 // Update the row with the new data
 CRUD.updateRow(newRowID, updatedRow);
